@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "Test Jekyll!"
 date:   2018-01-24 14:32:32 +0800
 categories: jekyll update
