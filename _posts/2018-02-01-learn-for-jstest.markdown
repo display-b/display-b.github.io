@@ -5,13 +5,15 @@ date:   2018-02-02
 categories: jsTest
 ---
 
+# **一起来学习前端测试**
+
 > 说起测试让我想起来了部门的一个测试大佬，一个人部署起了一套自动化测试框架，能写Python、PHP、Java。但是身为一个小前端的我暂时只了解到Mocha、ShouldJS、Karma、Travis CI、Jasmine，OK不说这么多让我们来看看这些玩意儿能干啥东西。
 
 
 > 我们接下来做的东西是基于**node环境**的哦，请确保大佬你的环境配置。
 
 
-# Mocha
+## Mocha
 
 > Mocha：一个Javascript测试的框架，讲得简单点就是一个能跑在node环境中也能运行在浏览器中的一个测试工具。怎么玩它呢？跟着小哥哥的脚步，一步两步、摩擦摩擦.....
 
@@ -87,7 +89,7 @@ assert.equal(doSomething( 1 , 2 ), 4);
 
 > next
 
-# Should.js
+## Should.js
 > 如果你觉得使用node 的assert模块觉得太low了，没关系。你还有ShouldJS、Chai等一些封装好的断言库，使用起来比较语义化。我们就来玩一玩 [ShouldJs](https://shouldjs.github.io/)吧
 
 让我们接着上个栗子，先安装一下should
@@ -131,7 +133,7 @@ require('should');
 
 
 
-# Karma
+## Karma
 > [karma](https://karma-runner.github.io/2.0/index.html) 是一个强大的测试集成框架，能集成测试框架，测试环境，测试覆盖率等，那我们为什么要使用karma呢？不能直接使用mocha吗？想了解karma可以去看看这篇文章 [karma的前世今生](http://taobaofed.org/blog/2016/01/08/karma-origin/)淘宝出品必属精品。
 
 看看karma能提供的功能：
@@ -196,7 +198,7 @@ karma start
 
 
 
-# Travis CI
+## Travis CI
 > [travis](https://travis-ci.org/)提供集成服务，可以绑定GitHub上的项目，进行监听变动自动测试。听起来是不是很爽，可以自动化了。接入也是很简单的哦
 
 1. 进入官网[travis](https://travis-ci.org/)使用你的GitHub登入，然后就可以看到你的项目了
