@@ -8,7 +8,7 @@ categories: jsTest
 > 说起测试让我想起来了部门的一个测试大佬，一个人部署起了一套自动化测试框架，能写Python、PHP、Java。但是身为一个小前端的我暂时只了解到Mocha、ShouldJS、Karma、Travis CI、Jasmine，OK不说这么多让我们来看看这些玩意儿能干啥东西。
 
 
-> 我们接下来做的东西是基于==node环境==的哦，请确保大佬你的环境配置。
+> 我们接下来做的东西是基于**node环境**的哦，请确保大佬你的环境配置。
 
 
 # Mocha
@@ -54,7 +54,7 @@ describe('TestAction', function() {
   });
 });
 ```
-这里的==describe==就是一个测试套件，每个测试套件里面可以包含多个测试用例 ==it==，也可以嵌套测试套件。
+这里的**describe**就是一个测试套件，每个测试套件里面可以包含多个测试用例 **it**，也可以嵌套测试套件。
 
 接下来让我们在package.json里面加上
 
@@ -143,7 +143,7 @@ require('should');
 - 高扩展性，支持插件开发
 - 支持调试
 
-接着让我们动起来吧！==在我们原来的项目上继续,先复制一份然后把该删掉的删除 node_module 、package.json里面的依赖==。action.js修改如下：
+接着让我们动起来吧！**在我们原来的项目上继续,先复制一份然后把该删掉的删除 node_module 、package.json里面的依赖**。action.js修改如下：
 
 ```
 function doSomething ( a , b ) {
@@ -173,7 +173,7 @@ npm install --save-dev karma karma-mocha karma-chrome-launcher should
 //ex:karma init my.conf.js
 karma init
 ```
-这时候是不是发现 ==-bash: karma: command not found== 😄，这是因为你没有安装karma-ci(可以让你在你的命令行里面使用karma的模块)
+这时候是不是发现 **-bash: karma: command not found** 😄，这是因为你没有安装karma-ci(可以让你在你的命令行里面使用karma的模块)
 
 ```
 npm install -g karma-cli
