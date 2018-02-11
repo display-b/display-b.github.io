@@ -180,6 +180,10 @@ res.header("Access-Control-Allow-Methods","POST");
 
 >OK，本文只是个人对CORS的一些了解与看法，如有错误欢迎指出，希望对大家理解CORS有所帮助。
 
+参考知识：
 
+   [https://www.w3.org/TR/cors/](https://www.w3.org/TR/cors/)
+
+   [https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS)
 
 
