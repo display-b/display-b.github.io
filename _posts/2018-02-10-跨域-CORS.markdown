@@ -1,0 +1,185 @@
+---
+layout: default
+title:  "跨域之CORS"
+date:   2018-02-10
+categories: js
+---
+
+# 一起来学学CORS
+> 相信不少同学都会在日常业务中碰到跨域的情况，其中有一种解决方案就是**跨域资源共享机制**，你对它了解吗？
+
+## 定义
+CORS（跨域资源共享机制）就是新增了一组http首部字段**允许服务器指定拥有访问该服务器资源权限的其他请求源**。主要实现工作也是在服务器端，对于我们日常使用到的场景（就我而言）主要有两个：
+
+- 跨域请求资源
+- 前端异常监控跨域
+
+我们下面就只从跨域请求资源方面来讲解一下。
+
+## 怎么使用CORS
+
+我们先来看看跨域资源共享机制到底是怎么用的，来看看以下demo。
+
+```
+//在这个域名（http://localhost:3000）下，假设我向另外一个域名 http://localhost:9000,发起了一次请求
+$.ajax({
+  url:"http://localhost:9000/users/getdata",
+  type:"GET",
+  success:function(res){
+    console.log(res);
+  }
+});
+```
+OH，NO这时候我们会发现报错了，淡定淡定。来看看报什么错呢？
+
+![image](/assets/imgs/2018/11/1.png)
+
+嗯，没错这就是**跨域**，至于为什么会出现跨域，大家可以去了解一下。解决跨域请求有不同的方法，这里我们使用跨域资源共享机制（[CORS](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS)）来解决。应该怎么做？
+
+首先，服务端修改请求相应的方式，我们这里使用的是node做个简单的例子
+
+```
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With,X-Requested-With");
+    res.header("Access-Control-Allow-Methods","POST,GET,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    next();
+});
+```
+这时候我们来看看请求,数据正常返回了。那我们来看看请求的响应头部。
+
+![image](/assets/imgs/2018/11/2.png)
+
+
+没错，跨域资源共享机制就是这么用，只需要在服务器配置相关响应头部即可（其他后端语言同理哈）。
+
+OK，是不是觉得很简单？我们理解了跨域共享机制怎么使用了，那么你对它的内部理解吗？
+
+## 内部原理
+### CORS配置
+对于内部的原理我们先来看看CORS机制新增了哪些http首部字段来设置访问权限的，这也是最重要的。
+
+- 响应字段
+    - Access-Control-Allow-Origin
+        >这个字段用来指定哪些源拥有访问权限，只有两个值（* | 指定域名）
+
+    - Access-Control-Allow-Credentials 
+        >指定了当浏览器的credentials设置为true时是否允许浏览器读取response的内容，如果是简单请求的话是会忽略该字段的。如果是在预检请求的时候使用那么就用来指定是否允许客户端携带相关身份凭证内容（比如cookies）
+        
+    - Access-Control-Expose-Headers
+        >该字段设置允许读取相应头部的字段内容
+        
+    - Access-Control-Max-Age
+        >设置下面讲到的预检请求的缓存时间，在此时间内再次需要预检请求的话就会直接使用缓存的结果
+        
+    - Access-Control-Allow-Methods
+        >指定了实际请求允许使用的http请求方法(用于预检请求)
+        
+    - Access-Control-Allow-Headers 
+        >指明实际请求中允许携带的首部字段(用于预检请求)
+- 请求字段
+    - Origin
+        >指定了跨域请求或者预检请求的来源(在预检请求中自动带上)
+
+    - Access-Control-Request-Method
+        >用于预检请求中，告诉服务器即将使用的http请求方法(在预检请求中自动带上)
+    
+    - Access-Control-Request-Headers
+        >用于预检请求中，告诉服务器即将使用的请求首部字段(在预检请求中手动带上)
+
+其次CORS请求在w3c里面讲到了两个概念
+
+- 简单请求
+- 预请求
+
+###  简单请求
+什么是简单请求？我们只需要满足以下三种条件：
+
+- 使用以下几种请求方法之一
+    - GET
+    - HEAD
+    - POST
+- 不得使用以下首部字段之外的其他设置
+    - Cache-Control
+    - Content-Language
+    - Content-Type
+    - Expires
+    - Last-Modified
+    - Pragma
+- Content-Type的设置只限于以下三种
+    - text/plain
+    - multipart/form-data
+    - application/x-www-form-urlencoded
+    
+其实我们刚才在一开始做的那个栗子就是一个简单请求，这个大家应该比较好 理解。下面我们来讲一下预请求。
+
+### 预请求
+什么是预请求？**就是当我们的请求不能同时满足简单请求的时候**，我们的请求会在实际请求发出之前先使用 OPTIONS 方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。
+
+SHOW CODE
+
+我们来测试下预请求，首先修改我们的请求方法，让它在发出真正请求之前会先发出一个预请求，这样我们这个请求就是**非简单请求**了。
+
+```
+        var url = 'http://localhost:9000/users/getdata';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    //注意这里我们添加了自定义头部字段哦，这时候我们这个请求就不是一个简单请求了
+    xhr.setRequestHeader('X-Custom-Header', 'value');
+    xhr.send();
+```
+然后再看看实际响应。报错了吧，报错了。嘿嘿嘿。来看看具体错误
+
+![image](/assets/imgs/2018/11/3.png)
+
+这是因为我们的服务器没有设置允许我们自定义首部字段哦～我们来修改一下，把我们的自定义首部字段添加到允许状态。
+
+```
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With,X-Custom-Header");
+```
+OK，我们再来刷一刷。这时候可以看到请求正常返回。但是我们发现我们只写了一次请求方法，但是浏览器却发出了有两个请求，我们分别来看看
+
+下图其实就是我们的预请求（options），可以看到我们在预请求的时候会有origin请求头部，告诉服务器我们的请求来自哪里
+
+![image](/assets/imgs/2018/11/4.png)
+
+下面的才是真正的请求
+
+![image](/assets/imgs/2018/11/5.png)
+
+> 所以我们的非简单请求方法浏览器会在真正请求之前自动发出一次OPTIONS预检请求来检查相关权限配置。
+
+接下来我们再干一些坏事情，来体验学习一下其他的首部字段。
+
+
+```
+//首先我们先把允许跨域的源设置改成其他的
+res.header("Access-Control-Allow-Origin", "http://localhost:9090");
+```
+
+![image](/assets/imgs/2018/11/6.png)
+
+嗯，没错我就只允许我设置的源可以访问我的资源，所以你访问不了浏览器会告诉你跨域了，这就是Access-Control-Allow-Origin的作用。
+
+我们再来把允许请求的http方法改一下，看看效果如何
+
+```
+
+res.header("Access-Control-Allow-Methods","POST");
+```
+我们再跑一下看看
+
+![image](/assets/imgs/2018/11/7.png)
+
+是不是很奇怪呢～我命名设置允许访问的是POST，但是我的明明是GET。其实这里一开始的时候我也产生了一个误解，那就是以为设置了哪个http请求方法就只能那种http请求方法能访问。**实际上这个响应头部的作用只是在预检请求的时候告诉客户端我们的服务器该接口支持哪些http请求方法而已**（可能是我比较笨）。
+
+当然大家还可以尝试配置一下其他的响应头部来了解对应的作用与原理。
+
+还有就是我们在实际开发当中并不需要我们写这么多东西。已经有封装好的cors模块，我们只需要直接引入使用即可。
+
+>OK，本文只是个人对CORS的一些了解与看法，如有错误欢迎指出，希望对大家理解CORS有所帮助。
+
+
+
+
