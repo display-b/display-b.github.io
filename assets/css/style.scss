@@ -4,7 +4,7 @@
 @import 'jekyll-theme-cayman';
 
 .page-header{
-	background-color:#000000;
+	background-color:#aecfcd;
 	background-image:none;
 
 	nav{
@@ -26,6 +26,29 @@
 			padding: .1rem .2rem;
 			color: #ffffff;
 			display: block;
+		}
+	}
+}
+
+
+.blog__item{
+	height:48px;
+	line-height:48px;
+	display:block;
+
+	a{
+		color: #000000;
+		font-size: 28px;
+		text-decoration:none;
+	}
+
+	&:hover{
+		// box-shadow: 0 0 5px #aecfcd inset;
+
+		a{
+			margin-left: 3px;
+			color: #666666;
+			font-size: bold;
 		}
 	}
 }
