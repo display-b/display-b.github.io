@@ -12,10 +12,9 @@
     
     <script>
       var target = 'https://display-b.github.io/blog/';
-      if( target == window.location.href ) {
-        return false;
+      if( !(target == window.location.href) ) {
+        window.location.href = 'https://display-b.github.io/blog/';
       }
-      window.location.href = 'https://display-b.github.io/blog/';
     </script>
   </head>
   <body>
