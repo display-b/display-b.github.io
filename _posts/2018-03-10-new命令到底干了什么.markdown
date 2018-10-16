@@ -6,9 +6,6 @@ categories: js
 ---
 # new的时候这个命令到底干了什么
 
-[MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new)
-[知乎new操作符的工作原理](https://www.zhihu.com/question/36440948)
-[js new到底做了什么](https://juejin.im/post/5a379d78f265da43305e91bd)
 
 
 假设有个函数 
@@ -66,3 +63,8 @@ var a = new A();
 }
 ```
 
+参考:
+
+- [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new)
+- [知乎new操作符的工作原理](https://www.zhihu.com/question/36440948)
+- [js new到底做了什么](https://juejin.im/post/5a379d78f265da43305e91bd)
