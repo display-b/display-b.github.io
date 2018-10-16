@@ -2,7 +2,7 @@
 layout: default
 title:  "三栏布局"
 date:   2018-03-01
-categories: js
+categories: css
 ---
 # 三栏布局
 > 三栏布局也就是说两边宽度固定,中间宽度自适应的布局
