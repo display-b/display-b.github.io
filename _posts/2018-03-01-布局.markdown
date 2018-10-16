@@ -1,0 +1,169 @@
+---
+layout: default
+title:  "三栏布局"
+date:   2018-03-01
+categories: js
+---
+# 三栏布局
+> 三栏布局也就是说两边宽度固定,中间宽度自适应的布局
+
+## 实现这种布局的方法
+- 圣杯布局
+- 双飞翼布局
+- flex布局  (这个最简单了)
+
+这里我们主要来讲一下圣杯布局吧,因为双飞翼布局其实差不多的,而flex布局就更简单了,几行代码就搞定.
+
+### 圣杯布局
+1、html结构
+
+```
+<div class='container'>
+    <div class="middle">中间的</div>
+    <div class="left">左边的</div>
+    <div class="right">右边的</div>
+</div>
+```
+2、css
+> 首先设置container的大小,三个布局div的浮动,和他们的显示样式
+
+```
+.middle,.left,.right {
+    float:left;
+}
+//padding设置为两边留下位置
+.container{
+    border: 1px solid black;
+    height: 300px;
+    padding: 0 300px;
+}
+//我们需要让中间自动适应宽度,所以宽度需要设置100%,占据父元素剩余的大小
+.middle{
+    width:100%;
+    background: #ccc;
+}
+.left{
+    background: pink;
+    width: 300px;
+    height: 300px;
+}
+    
+.right{
+    background: pink;
+    width: 300px;
+    height: 300px;
+}
+```
+> 这时候,两个侧边的div都在下面了,,我们需要把他们提上来,这时候用到margin 的负值,可以看看[这篇文章](http://www.cnblogs.com/2050/archive/2012/08/13/2636467.html)讲解原理
+
+这里也记录一下margin负值的作用
+> margin负值,负边距对这些由文档流控制的元素的作用是，会使它们在文档流中的位置发生偏移，但这种偏移不同于相对定位，通过相对定位偏移后，其仍然会坚守着它原来占据的空间，不会让文档流的其它元素乘虚而入。而通过负边距进行偏移的元素，它会放弃偏移前占据的空间，这样它后面文档流中的其它元素就会“流”过来填充这部分空间
+
+也就是说,设置了负边距之后,你设置了多少那你的元素就会往对应方向偏移多少,同时这个元素在文档流上占据的位置只剩下(元素的width - margin负值的绝对值)
+
+所以这里主要利用了margin的这个作用来把两边的div提上来
+
+设置下样式
+
+```
+.left{
+    margin-left: -100%;
+}
+    
+.right{
+    margin-left: -300px;
+}
+```
+因为把两边的margin负值都设置成了自己的宽度,所以他们在文档流上是不占据位置了,在加上是向左边浮动,所以,他们两都飞到了middle的上方了.这时候就把middle挡住了
+
+所以我们还需要设置一下两侧的位置移动
+
+```
+.left{
+    position: relative;
+    left: -300px;
+}
+
+.right{
+    position: relative;
+    right: -300px;
+}
+```
+这样就在两侧了
+
+这里我们回头看看这部分代码
+```
+.container{
+    border: 1px solid black;
+    height: 300px;
+    padding: 0 300px;
+}
+```
+padding就是为两侧的div占据位置,然后剩余的空间留给了middle..这个也是圣杯布局的原理..所以能做到两边固定,中间自适应宽度.
+
+## 双飞翼布局
+> 这个不同点在于如何处理中间部分被遮挡的问题.圣杯布局,利用了padding加上两侧位移来解决..而双飞翼则是利用margin来处理
+
+
+
+
+## 最终代码
+
+### 圣杯布局
+```
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arty Mouse: Sticker Book</title>
+        <style>
+            *{
+                margin:0;
+                padding:0;
+            }
+            .middle, .left, .right{
+                float: left;
+            }
+            .middle{
+                width:100%;
+                background: #ccc;
+            }
+            .left{
+                background: pink;
+                width: 300px;
+                height: 300px;
+                margin-left: -100%;
+                }
+                
+            .right{
+                background: pink;
+                width: 300px;
+                height: 300px;
+                margin-left: -300px;  
+            }
+            .left{
+                position: relative;
+                left: -300px;
+            }
+
+            .right{
+                position: relative;
+                right: -300px;
+            }
+
+            .container{
+                border: 1px solid black;
+                height: 300px;
+                padding: 0 300px;
+            }
+        </style>
+    </head>
+    <body >
+        <div class='container'>
+            <div class="middle">中间的</div>
+            <div class="left">左边的</div>
+            <div class="right">右边的</div>
+        </div>
+    </body>
+</html>
+
+```
