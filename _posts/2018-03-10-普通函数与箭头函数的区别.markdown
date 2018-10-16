@@ -1,0 +1,42 @@
+---
+layout: default
+title:  "普通函数跟尖头函数有什么不一样"
+date:   2018-03-10
+categories: js
+---
+# 普通函数跟尖头函数有什么不一样
+
+**普通函数的特点**
+
+```
+//普通函数是这样的
+function test(){
+  console.log("a")  
+}
+```
+- 函数体内的this是可变的,指向的是运行时的所在上下文环境
+- 可以使用new命令,当作构造函数*(这里涉及到了new这个命令过程到底干了什么,可以看另外的文章“[new到底干了什么](https://display-b.github.io/js/2018/03/10/new命令到底干了什么.html)”)*
+- 函数体内可以使用arguments参数
+- 
+
+
+**看尖头函数的特点**
+
+```
+//尖头函数是这样的
+var a = () => console.log("a");
+
+```
+- 函数体内的this指向的是定义时候所在的对象,而不是运行时所在的对象,所以同时也就是说不能使用apply call bind等方法来改变this的指向
+- 尖头函数没有原型对象(prototype){可以看解答一}
+- 不能当作构造函数,也就是说不能使用new,会抛出错误*(可以在另外的文章“new到底干了什么”里面得出为什么不能使用new)*
+- arguments参数在函数体内是不存在的
+- 不可以使用yield命令，因此箭头函数不能用作 Generator 函数
+
+###### 解答一
+
+```
+var fntest = ()=>{};
+fntest.prototype
+=> undefined   //输出了undefined
+```

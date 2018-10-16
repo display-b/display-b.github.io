@@ -1,0 +1,68 @@
+---
+layout: default
+title:  "new的时候这个命令到底干了什么"
+date:   2018-03-10
+categories: js
+---
+# new的时候这个命令到底干了什么
+
+[MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new)
+[知乎new操作符的工作原理](https://www.zhihu.com/question/36440948)
+[js new到底做了什么](https://juejin.im/post/5a379d78f265da43305e91bd)
+
+
+假设有个函数 
+
+```
+function A (){
+    
+}
+
+A.prototype = {
+    test:function(){
+        
+    }
+}
+```
+
+当我们实例化A的时候会发生如下的事件
+
+1.首先会创建一个新对象
+
+```
+var newOj = new Object();
+```
+
+2.然后这个新对象会继承A的原型prototype
+(这里需要去看看js的继承,看看对象的__proto__属性,看看prototype是什么)
+```
+//也就是会这样做
+newOj.__proto__ = A.prototype
+
+```
+3.得到了一个继承至A原型的对象之后,再去调用A构造函数,并且把this指向刚刚创建的新对象
+
+```
+//也就是说会这样做
+var oj = A.call(newOj,arguments);
+
+```
+4.得到调用的结果之后,再来判断下,如果返回的oj不是一个对象(A没有返回一个显式的对象)的话,那么就会把newOj 当作实例化的结果返回.
+
+所以最后,我们得到的结果:
+
+```
+var a = new A();
+
+//a的实际内容如下
+{
+    __proto__:{  //这个就是A的prototype对象,也就是上面第二步的操作结果
+        test:fn(),
+        __proto__:{//这个则是A继承Object的prototype来的
+            constructor:fn(),
+            hasOwnProperty:fn()
+        }
+    }
+}
+```
+
